@@ -238,7 +238,9 @@ sap.ui.define([
 		getPersonalization: function (oPersonalizer, oFilterBar) {
 			oPersonalizer.getPersData()
 				.done(function (oPersData) {
-					oFilterBar.setUiState(new sap.ui.comp.state.UIState(oPersData.selectionVariant.mProperties));
+					if (oPersData && oPersData.selectionVariant) {
+						oFilterBar.setUiState(new sap.ui.comp.state.UIState(oPersData.selectionVariant.mProperties));
+					}
 					oFilterBar.search();
 				});
 		},
