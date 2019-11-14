@@ -1,0 +1,41 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+	xmlns:smartTable="sap.ui.comp.smarttable" xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+	controllerName="com.sap.training00.HOFIOCDSMaster.controller.Master" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="{i18n>title}">
+		<content>
+			<smartFilterBar:SmartFilterBar id="smartFilterBar" entitySet="ZHOFIO_EMPLOYEE" persistencyKey="SmartFilter_Explored"
+				basicSearchFieldName="Bukrs" enableBasicSearch="true"></smartFilterBar:SmartFilterBar>
+			<smartTable:SmartTable id="master_smarttable" entitySet="ZHOFIO_EMPLOYEE" smartFilterId="smartFilterBar" tableType="Table"
+				useExportToExcel="true" beforeExport="onBeforeExport" useVariantManagement="true" useTablePersonalisation="true" showRowCount="true"
+				persistencyKey="SmartTableAnalytical_Explored" enableAutoBinding="true" class="sapUiResponsiveContentPadding">
+				<!-- layout data used to make the table growing but the filter bar fixed -->
+				<smartTable:layoutData>
+					<FlexItemData growFactor="1" baseSize="0%"/>
+				</smartTable:layoutData>
+				<smartTable:customToolbar>
+					<OverflowToolbar design="Transparent">
+						<ToolbarSpacer/>
+						<Button id="master_button_add" text="{i18n>button.add}" press="onNewCustomerPress"/>
+					</OverflowToolbar>
+				</smartTable:customToolbar>
+				<Table>
+					<columns>
+						<Column id="master_column_delete" width="100px" hAlign="Left">
+							<customData>
+								<core:CustomData key="p13nData" value='\{"columnKey": "master_column_delete","columnIndex":"99"}'/>
+							</customData>
+							<Text text="{i18n>app.delete}"/>
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem type="Navigation" press="onCustomerPress">
+							<cells>
+								<Button press="onDeleteCustomerPress" icon="sap-icon://delete"/>
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</smartTable:SmartTable>
+		</content>
+	</Page>
+</mvc:View>

@@ -1,0 +1,6 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+	controllerName="com.sap.training00.HOFIOCDSMaster.controller.Customer" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page title="Customer" showNavButton="true" navButtonPress="onNavBack">
+		<content></content>
+	</Page>
+</mvc:View>
