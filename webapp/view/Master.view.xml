@@ -3,8 +3,8 @@
 	controllerName="com.sap.training00.HOFIOCDSMaster.controller.Master" xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page title="{i18n>title}">
 		<content>
-			<smartFilterBar:SmartFilterBar id="smartFilterBar" entitySet="ZHOFIO_EMPLOYEE" persistencyKey="SmartFilter_Explored"
-				basicSearchFieldName="Bukrs" enableBasicSearch="true"></smartFilterBar:SmartFilterBar>
+			<smartFilterBar:SmartFilterBar id="master_smartfilterbar" entitySet="ZHOFIO_EMPLOYEE" persistencyKey="SmartFilter_Explored"
+				enableBasicSearch="true" search="onSearch"></smartFilterBar:SmartFilterBar>
 			<smartTable:SmartTable id="master_smarttable" entitySet="ZHOFIO_EMPLOYEE" smartFilterId="smartFilterBar" tableType="Table"
 				useExportToExcel="true" beforeExport="onBeforeExport" useVariantManagement="true" useTablePersonalisation="true" showRowCount="true"
 				persistencyKey="SmartTableAnalytical_Explored" enableAutoBinding="true" class="sapUiResponsiveContentPadding">

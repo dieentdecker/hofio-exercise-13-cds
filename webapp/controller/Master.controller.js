@@ -18,6 +18,29 @@ sap.ui.define([
 		 */
 		onInit: function () {
 			this.getRouter().getRoute("Master").attachPatternMatched(this._onPatternMatched, this);
+
+			if (sap.ushell && sap.ushell.Container) {
+				let oPersonalizationService = sap.ushell.Container.getService("Personalization");
+				let oComponent = sap.ui.core.Component.getOwnerComponentFor(this.getView());
+				let oScope = {
+					keyCategory: oPersonalizationService.constants.keyCategory.FIXED_KEY,
+					writeFrequency: oPersonalizationService.constants.writeFrequency.LOW,
+					clientStorageAllowed: true
+				};
+
+				let oData = {
+					container: "SmartFilterBar",
+					item: "filter"
+				};
+
+				this.oPersonalizer = oPersonalizationService.getPersonalizer(oData, oScope, oComponent);
+
+				let oFilt = this.getView().byId("master_smartfilterbar");
+				this.oNavigationHelper = new NavigationHandler(this);
+				this.readAppState(this.oNavigationHelper, this, oFilt);
+				this.getPersonalization(this.oPersonalizer, oFilt);
+			}
+
 		},
 
 		_onPatternMatched: function () {
@@ -35,15 +58,6 @@ sap.ui.define([
 			});
 
 			this.setModel(oLanguageModel, "languageModel");
-
-			let oParameter = this.getOwnerComponent().getCustomerID();
-
-			if (oParameter) {
-				this.getRouter().navTo("Customer", {
-					customerid: oParameter
-				}, false);
-			}
-
 		},
 
 		_navigate: function (sParameter) {
@@ -86,19 +100,27 @@ sap.ui.define([
 		},
 
 		onDeleteCustomerPress: function (oEvent) {
-				let sCustomerPath = oEvent.getSource().getBindingContext().sPath,
-					oTable = this.getView().byId("master_smarttable");
+			let sCustomerPath = oEvent.getSource().getBindingContext().sPath,
+				oTable = this.getView().byId("master_smarttable");
 
-				this.deleteODataEntry(this.getModel(), sCustomerPath, null, oTable);
+			this.deleteODataEntry(this.getModel(), sCustomerPath, null, oTable);
+		},
+
+		onSearch: function (oEvent) {
+			let oFilt = this.oView.byId("master_smartfilterbar");
+			if (sap.ushell && sap.ushell.Container) {
+				this.setAppState(this.oNavigationHelper, oFilt);
+				this.setPersonalization(this.oPersonalizer, oFilt);
 			}
-			/**
-			 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
-			 * (NOT before the first rendering! onInit() is used for that one!).
-			 * @memberOf com.sap.training00.HOFIOCDSMaster.view.Master
-			 */
-			//	onBeforeRendering: function() {
-			//
-			//	},
+		},
+		/**
+		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
+		 * (NOT before the first rendering! onInit() is used for that one!).
+		 * @memberOf com.sap.training00.HOFIOCDSMaster.view.Master
+		 */
+		//	onBeforeRendering: function() {
+		//
+		//	},
 
 		/**
 		 * Called when the View has been rendered (so its HTML is part of the document). Post-rendering manipulations of the HTML could be done here.

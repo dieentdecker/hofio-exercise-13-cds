@@ -30,6 +30,13 @@
 				"settings": {
 					"localUri": "localService/ZHOFIO_EMPLOYEE_CDS_VAN.xml"
 				}
+			},
+			"INTEROP": {
+				"uri": "/sap/opu/odata/ui2/INTEROP/",
+				"type": "OData",
+				"settings": {
+					"localUri": "localService/INTEROP/metadata.xml"
+				}
 			}
 		}
 	},
@@ -89,6 +96,16 @@
 			"@i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"uri": "i18n/i18n.properties"
+			},
+			"GlobalContainers": {
+				"type": "sap.ui.model.odata.v2.ODataModel",
+				"settings": {
+					"defaultOperationMode": "Server",
+					"defaultBindingMode": "OneWay",
+					"defaultCountMode": "Request"
+				},
+				"dataSource": "INTEROP",
+				"preload": true
 			}
 		},
 		"resources": {
@@ -119,12 +136,12 @@
 					]
 				},
 				{
-					"name": "Customer",
-					"pattern": "/customer/{customerid}",
+					"name": "Master",
+					"pattern": "/:?sap-iapp-state:",
 					"titleTarget": "",
 					"greedy": false,
 					"target": [
-						"Customer"
+						"Master"
 					]
 				}
 			],
@@ -140,10 +157,6 @@
 					"viewType": "XML",
 					"viewName": "Master",
 					"controlAggregation": "pages"
-				},
-				"Customer": {
-					"viewType": "XML",
-					"viewName": "Customer"
 				}
 			}
 		}

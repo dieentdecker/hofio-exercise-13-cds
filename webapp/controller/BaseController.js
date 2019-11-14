@@ -189,6 +189,66 @@ sap.ui.define([
 			let oMessageModel = sap.ui.getCore().getMessageManager().getMessageModel();
 			oMessagePopover.setModel(oMessageModel, "message");
 			oMessagePopover.openBy(oEvent.getSource());
+		},
+
+		readAppState: function (oNavigationHelper, oController, oFilterBar) {
+			var appStateKey = "";
+			var url = window.location.href;
+			var i = url.search('sap-iapp-state');
+
+			if (i > 0) {
+				i = i + 15;
+				appStateKey = url.substring(i);
+			}
+			console.log("appStateKey:" + appStateKey);
+			if (appStateKey !== "") {
+				var url1 = "/GlobalContainers('" + appStateKey + "')";
+				var oModel = this.getOwnerComponent().getModel("GlobalContainers");
+
+				sap.ui.core.BusyIndicator.show();
+				var params = {
+					success: function (oData) {
+						var obj = JSON.parse(oData.value);
+						console.log(JSON.stringify(obj));
+						if (obj && obj.selectionVariant && obj.selectionVariant.mProperties) {
+							oFilterBar.setUiState(new sap.ui.comp.state.UIState(obj.selectionVariant.mProperties));
+						}
+
+						oFilterBar.search();
+						sap.ui.core.BusyIndicator.hide();
+					}.bind(oController),
+					error: function (oError) {
+						console.log("error: " + JSON.stringify(oError));
+						sap.ui.core.BusyIndicator.hide();
+					}
+				};
+
+				oModel.read(url1, params);
+			}
+		},
+
+		setAppState: function (oNavigationHelper, oFilterBar) {
+			var mInnerAppData = {
+				selectionVariant: oFilterBar.getUiState()
+			};
+
+			oNavigationHelper.storeInnerAppState(mInnerAppData);
+		},
+
+		getPersonalization: function (oPersonalizer, oFilterBar) {
+			oPersonalizer.getPersData()
+				.done(function (oPersData) {
+					oFilterBar.setUiState(new sap.ui.comp.state.UIState(oPersData.selectionVariant.mProperties));
+					oFilterBar.search();
+				});
+		},
+
+		setPersonalization: function (oPersonalizer, oFilterBar) {
+			var mInnerAppData = {
+				selectionVariant: oFilterBar.getUiState()
+			};
+
+			oPersonalizer.setPersData(mInnerAppData);
 		}
 	});
 });
